@@ -1,0 +1,7 @@
+{
+    "java.project.sourcePaths": [
+        "backend/usuario/config",
+        "backend/profesion/config",
+        "backend/cita/src/main/java/com/tuhoraya/cita"
+    ]
+}
