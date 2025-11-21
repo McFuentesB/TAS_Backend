@@ -1,0 +1,94 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: tas-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tas_db
+      MYSQL_USER: tas_user
+      MYSQL_PASSWORD: tas_pass
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - tas-net
+    # Si quieres acceder desde tu PC al MySQL de la EC2, descomenta:
+    # ports:
+    #   - "3306:3306"
+
+  usuario:
+    build:
+      context: ./backend/usuario
+    image: tas-usuario:latest
+    container_name: usuario
+    restart: always
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: tas_user
+      SPRING_DATASOURCE_PASSWORD: tas_pass
+    depends_on:
+      - mysql
+    networks:
+      - tas-net
+
+  profesion:
+    build:
+      context: ./backend/profesion
+    image: tas-profesion:latest
+    container_name: profesion
+    restart: always
+    environment:
+      SERVER_PORT: 8082
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: tas_user
+      SPRING_DATASOURCE_PASSWORD: tas_pass
+    depends_on:
+      - mysql
+    networks:
+      - tas-net
+
+  cita:
+    build:
+      context: ./backend/cita
+    image: tas-cita:latest
+    container_name: cita
+    restart: always
+    environment:
+      SERVER_PORT: 8083
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/tas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: tas_user
+      SPRING_DATASOURCE_PASSWORD: tas_pass
+    depends_on:
+      - mysql
+    networks:
+      - tas-net
+
+  bff:
+    build:
+      context: ./backend/bff
+    image: tas-bff:latest
+    container_name: bff
+    restart: always
+    environment:
+      SERVER_PORT: 8080
+      # Estas URLs las usa el BFF (las que pusimos en application.yml con ${USUARIO_SERVICE_URL}, etc.)
+      USUARIO_SERVICE_URL: http://usuario:8081
+      PROFESION_SERVICE_URL: http://profesion:8082
+      CITA_SERVICE_URL: http://cita:8083
+    depends_on:
+      - usuario
+      - profesion
+      - cita
+    ports:
+      - "8080:8080"   # este es el que expones en EC2
+    networks:
+      - tas-net
+
+networks:
+  tas-net:
+
+volumes:
+  mysql_data:
