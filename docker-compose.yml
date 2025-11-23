@@ -14,14 +14,12 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - tas-net
-    # Si quieres acceder desde tu PC al MySQL de la EC2, descomenta:
+    # Si quieres conectarte desde tu PC al MySQL que está en la EC2, descomenta:
     # ports:
     #   - "3306:3306"
 
   usuario:
-    build:
-      context: ./backend/usuario
-    image: tas-usuario:latest
+    image: tuusuario/tas-usuario:1.0
     container_name: usuario
     restart: always
     environment:
@@ -35,9 +33,7 @@ services:
       - tas-net
 
   profesion:
-    build:
-      context: ./backend/profesion
-    image: tas-profesion:latest
+    image: tuusuario/tas-profesion:1.0
     container_name: profesion
     restart: always
     environment:
@@ -51,9 +47,7 @@ services:
       - tas-net
 
   cita:
-    build:
-      context: ./backend/cita
-    image: tas-cita:latest
+    image: tuusuario/tas-cita:1.0
     container_name: cita
     restart: always
     environment:
@@ -67,14 +61,11 @@ services:
       - tas-net
 
   bff:
-    build:
-      context: ./backend/bff
-    image: tas-bff:latest
+    image: tuusuario/tas-bff:1.0
     container_name: bff
     restart: always
     environment:
       SERVER_PORT: 8080
-      # Estas URLs las usa el BFF (las que pusimos en application.yml con ${USUARIO_SERVICE_URL}, etc.)
       USUARIO_SERVICE_URL: http://usuario:8081
       PROFESION_SERVICE_URL: http://profesion:8082
       CITA_SERVICE_URL: http://cita:8083
@@ -83,7 +74,7 @@ services:
       - profesion
       - cita
     ports:
-      - "8080:8080"   # este es el que expones en EC2
+      - "8080:8080"
     networks:
       - tas-net
 

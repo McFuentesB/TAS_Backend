@@ -1,0 +1,16 @@
+com\tuhoraya\profesion\model\ServicioProfesional.class
+com\tuhoraya\profesion\controller\RubroController.class
+com\tuhoraya\profesion\model\Profesion.class
+com\tuhoraya\profesion\config\WebConfig.class
+com\tuhoraya\profesion\ProfesionApplication.class
+com\tuhoraya\profesion\repository\ServicioProfesionalRepository.class
+com\tuhoraya\profesion\config\WebConfig$1.class
+com\tuhoraya\profesion\model\Rubro.class
+com\tuhoraya\profesion\repository\ProfesionRepository.class
+com\tuhoraya\profesion\controller\ProfesionController.class
+com\tuhoraya\profesion\config\SecurityConfig.class
+com\tuhoraya\profesion\repository\RubroRepository.class
+com\tuhoraya\profesion\controller\ServicioProfesionalController.class
+com\tuhoraya\profesion\service\ProfesionService.class
+com\tuhoraya\profesion\service\RubroService.class
+com\tuhoraya\profesion\service\ServicioProfesionalService.class
