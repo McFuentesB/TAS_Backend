@@ -1,4 +1,4 @@
-package main.java.com.tuhoraya.bff.controller;
+package com.tuhoraya.bff.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
