@@ -1,12 +1,31 @@
 package com.tuhoraya.usuario.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "usuario")
 public class Usuario {
+    @Id
+    @Column(name = "id_usuario", length = 36)
     private String id_usuario;
+
+    @Column(name = "nombre", length = 100)
     private String nombre;
+
+    @Column(name = "apellido", length = 100)
     private String apellido;
+
+    @Column(name = "correo", length = 150, unique = true)
     private String correo;
+
+    @Column(name = "clave", length = 255)
     private String clave;
+
+    @Column(name = "id_rol", length = 36)
     private String id_rol;
+
+    @Column(name = "foto_url", length = 500)
+    private String foto_url;
 
     public String getId_usuario() { return id_usuario; }
     public void setId_usuario(String id_usuario) { this.id_usuario = id_usuario; }
@@ -20,4 +39,6 @@ public class Usuario {
     public void setClave(String clave) { this.clave = clave; }
     public String getId_rol() { return id_rol; }
     public void setId_rol(String id_rol) { this.id_rol = id_rol; }
+    public String getFoto_url() { return foto_url; }
+    public void setFoto_url(String foto_url) { this.foto_url = foto_url; }
 }

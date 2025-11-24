@@ -18,15 +18,16 @@ public class UsuarioService {
     }
 
     public Usuario getById(String id) {
-        return repository.findById(id);
+        return repository.findById(id).orElse(null);
     }
 
     public void save(String id, Usuario obj) {
-        repository.save(id, obj);
+        obj.setId_usuario(id);
+        repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
-    
+
 }

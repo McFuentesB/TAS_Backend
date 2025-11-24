@@ -1,5 +1,6 @@
 package com.tuhoraya.usuario.controller;
 
+import com.tuhoraya.usuario.dto.UsuarioProfesionalDTO;
 import com.tuhoraya.usuario.model.UsuarioProfesional;
 import com.tuhoraya.usuario.service.UsuarioProfesionalService;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +17,13 @@ public class UsuarioProfesionalController {
     }
 
     @GetMapping
-    public List<UsuarioProfesional> getAll() {
-        return service.getAll();
+    public List<UsuarioProfesionalDTO> getAll() {
+        return service.getAllWithUserData();
     }
 
     @GetMapping("/{id}")
-    public UsuarioProfesional getById(@PathVariable String id) {
-        return service.getById(id);
+    public UsuarioProfesionalDTO getById(@PathVariable String id) {
+        return service.getByIdWithUserData(id);
     }
 
     @PostMapping("/{id}")

@@ -18,6 +18,11 @@ public class SecurityConfig {
         http
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
+                // Endpoints públicos - no requieren autenticación
+                .requestMatchers("/bff/profesion/**").permitAll()
+                .requestMatchers("/bff/usuarioprofesional").permitAll()
+                .requestMatchers("/bff/usuarioprofesional/**").permitAll()
+                // Todos los demás endpoints requieren autenticación
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2

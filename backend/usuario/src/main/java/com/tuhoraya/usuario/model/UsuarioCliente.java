@@ -1,7 +1,15 @@
 package com.tuhoraya.usuario.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "usuario_cliente")
 public class UsuarioCliente {
+    @Id
+    @Column(name = "id_usuario_cliente", length = 36)
     private String id_usuario_cliente;
+
+    @Column(name = "id_usuario", length = 36)
     private String id_usuario;
 
     public String getId_usuario_cliente() { return id_usuario_cliente; }

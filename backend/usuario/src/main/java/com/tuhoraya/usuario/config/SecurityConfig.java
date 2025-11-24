@@ -18,6 +18,9 @@ public class SecurityConfig {
         http
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
+                // Permitir consultas GET de profesionales sin autenticación (acceso público)
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/usuarioprofesional/**").permitAll()
+                // Todos los demás endpoints requieren autenticación
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2
