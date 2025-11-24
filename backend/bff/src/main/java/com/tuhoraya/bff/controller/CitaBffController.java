@@ -1,5 +1,7 @@
 package com.tuhoraya.bff.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/bff")
 public class CitaBffController {
 
+    private static final Logger log = LoggerFactory.getLogger(CitaBffController.class);
+
     private final RestTemplate restTemplate;
 
     @Value("${microservices.cita-url}")
@@ -19,24 +23,41 @@ public class CitaBffController {
         this.restTemplate = restTemplate;
     }
 
-    private ResponseEntity<String> forwardGet(String path) {
+    // ───────────────────────── helpers ─────────────────────────
+
+    private ResponseEntity<String> forwardGet(String path, String authHeader) {
         String url = citaServiceUrl + path;
+
+        HttpHeaders headers = new HttpHeaders();
+        if (authHeader != null && !authHeader.isBlank()) {
+            headers.set(HttpHeaders.AUTHORIZATION, authHeader);
+        }
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
         try {
-            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            ResponseEntity<String> response =
+                    restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
             return ResponseEntity
                     .status(response.getStatusCode())
                     .body(response.getBody());
         } catch (RestClientException e) {
+            log.error("Error llamando a {}: {}", url, e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.BAD_GATEWAY)
                     .body("{\"error\":\"Error llamando a " + url + "\"}");
         }
     }
 
-    private ResponseEntity<String> forwardPost(String path, String body) {
+    private ResponseEntity<String> forwardPost(String path, String body, String authHeader) {
         String url = citaServiceUrl + path;
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        if (authHeader != null && !authHeader.isBlank()) {
+            headers.set(HttpHeaders.AUTHORIZATION, authHeader);
+        }
+
         HttpEntity<String> entity = new HttpEntity<>(body, headers);
 
         try {
@@ -46,18 +67,29 @@ public class CitaBffController {
                     .status(response.getStatusCode())
                     .body(response.getBody());
         } catch (RestClientException e) {
+            log.error("Error llamando a {}: {}", url, e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.BAD_GATEWAY)
                     .body("{\"error\":\"Error llamando a " + url + "\"}");
         }
     }
 
-    private ResponseEntity<String> forwardDelete(String path) {
+    private ResponseEntity<String> forwardDelete(String path, String authHeader) {
         String url = citaServiceUrl + path;
+
+        HttpHeaders headers = new HttpHeaders();
+        if (authHeader != null && !authHeader.isBlank()) {
+            headers.set(HttpHeaders.AUTHORIZATION, authHeader);
+        }
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
         try {
-            restTemplate.delete(url);
-            return ResponseEntity.noContent().build();
+            ResponseEntity<Void> response =
+                    restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+            return ResponseEntity.status(response.getStatusCode()).build();
         } catch (RestClientException e) {
+            log.error("Error llamando a {}: {}", url, e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.BAD_GATEWAY)
                     .body("{\"error\":\"Error llamando a " + url + "\"}");
@@ -67,115 +99,92 @@ public class CitaBffController {
     // ───────────────────────────── /cita ─────────────────────────────
 
     @GetMapping("/cita")
-    public ResponseEntity<String> getAllCitas() {
-        return forwardGet("/cita");
+    public ResponseEntity<String> getAllCitas(
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/cita", authorization);
     }
 
     @GetMapping("/cita/{id}")
-    public ResponseEntity<String> getCitaById(@PathVariable String id) {
-        return forwardGet("/cita/" + id);
+    public ResponseEntity<String> getCitaById(
+            @PathVariable String id,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/cita/" + id, authorization);
     }
 
     @PostMapping("/cita/{id}")
-    public ResponseEntity<String> saveCita(@PathVariable String id,
-                                           @RequestBody String body) {
-        return forwardPost("/cita/" + id, body);
+    public ResponseEntity<String> saveCita(
+            @PathVariable String id,
+            @RequestBody String body,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardPost("/cita/" + id, body, authorization);
     }
 
     @DeleteMapping("/cita/{id}")
-    public ResponseEntity<String> deleteCita(@PathVariable String id) {
-        return forwardDelete("/cita/" + id);
-    }
-
-    // ────────────────────────── /comentarios ──────────────────────────
-
-    @GetMapping("/comentarios")
-    public ResponseEntity<String> getAllComentarios() {
-        return forwardGet("/comentarios");
-    }
-
-    @GetMapping("/comentarios/{id}")
-    public ResponseEntity<String> getComentarioById(@PathVariable String id) {
-        return forwardGet("/comentarios/" + id);
-    }
-
-    @PostMapping("/comentarios/{id}")
-    public ResponseEntity<String> saveComentario(@PathVariable String id,
-                                                 @RequestBody String body) {
-        return forwardPost("/comentarios/" + id, body);
-    }
-
-    @DeleteMapping("/comentarios/{id}")
-    public ResponseEntity<String> deleteComentario(@PathVariable String id) {
-        return forwardDelete("/comentarios/" + id);
-    }
-
-    // ──────────────────────────── /historial ────────────────────────────
-
-    @GetMapping("/historial")
-    public ResponseEntity<String> getAllHistorial() {
-        return forwardGet("/historial");
-    }
-
-    @GetMapping("/historial/{id}")
-    public ResponseEntity<String> getHistorialById(@PathVariable String id) {
-        return forwardGet("/historial/" + id);
-    }
-
-    @PostMapping("/historial/{id}")
-    public ResponseEntity<String> saveHistorial(@PathVariable String id,
-                                                @RequestBody String body) {
-        return forwardPost("/historial/" + id, body);
-    }
-
-    @DeleteMapping("/historial/{id}")
-    public ResponseEntity<String> deleteHistorial(@PathVariable String id) {
-        return forwardDelete("/historial/" + id);
+    public ResponseEntity<String> deleteCita(
+            @PathVariable String id,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardDelete("/cita/" + id, authorization);
     }
 
     // ───────────────────────────── /pagos ─────────────────────────────
+// ───────────────────────────── /pagos ─────────────────────────────
 
-    @GetMapping("/pagos")
-    public ResponseEntity<String> getAllPagos() {
-        return forwardGet("/pagos");
-    }
+@GetMapping("/pagos")
+public ResponseEntity<String> getAllPagos(
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardGet("/pagos", authorization);
+}
 
-    @GetMapping("/pagos/{id}")
-    public ResponseEntity<String> getPagoById(@PathVariable String id) {
-        return forwardGet("/pagos/" + id);
-    }
+@GetMapping("/pagos/{id}")
+public ResponseEntity<String> getPagoById(
+        @PathVariable String id,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardGet("/pagos/" + id, authorization);
+}
 
-    @PostMapping("/pagos/{id}")
-    public ResponseEntity<String> savePago(@PathVariable String id,
-                                           @RequestBody String body) {
-        return forwardPost("/pagos/" + id, body);
-    }
+@PostMapping("/pagos/{id}")
+public ResponseEntity<String> savePago(
+        @PathVariable String id,
+        @RequestBody String body,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardPost("/pagos/" + id, body, authorization);
+}
 
-    @DeleteMapping("/pagos/{id}")
-    public ResponseEntity<String> deletePago(@PathVariable String id) {
-        return forwardDelete("/pagos/" + id);
-    }
+@DeleteMapping("/pagos/{id}")
+public ResponseEntity<String> deletePago(
+        @PathVariable String id,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardDelete("/pagos/" + id, authorization);
+}
 
-    // ─────────────────────────── /tipocita ───────────────────────────
+// ─────────────────────────── /tipocita ───────────────────────────
 
-    @GetMapping("/tipocita")
-    public ResponseEntity<String> getAllTipoCita() {
-        return forwardGet("/tipocita");
-    }
+@GetMapping("/tipocita")
+public ResponseEntity<String> getAllTipoCita(
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardGet("/tipocita", authorization);
+}
 
-    @GetMapping("/tipocita/{id}")
-    public ResponseEntity<String> getTipoCitaById(@PathVariable String id) {
-        return forwardGet("/tipocita/" + id);
-    }
+@GetMapping("/tipocita/{id}")
+public ResponseEntity<String> getTipoCitaById(
+        @PathVariable String id,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardGet("/tipocita/" + id, authorization);
+}
 
-    @PostMapping("/tipocita/{id}")
-    public ResponseEntity<String> saveTipoCita(@PathVariable String id,
-                                               @RequestBody String body) {
-        return forwardPost("/tipocita/" + id, body);
-    }
+@PostMapping("/tipocita/{id}")
+public ResponseEntity<String> saveTipoCita(
+        @PathVariable String id,
+        @RequestBody String body,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardPost("/tipocita/" + id, body, authorization);
+}
 
-    @DeleteMapping("/tipocita/{id}")
-    public ResponseEntity<String> deleteTipoCita(@PathVariable String id) {
-        return forwardDelete("/tipocita/" + id);
-    }
+@DeleteMapping("/tipocita/{id}")
+public ResponseEntity<String> deleteTipoCita(
+        @PathVariable String id,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardDelete("/tipocita/" + id, authorization);
+}
+
 }

@@ -1,15 +1,37 @@
 package com.tuhoraya.cita.model;
 
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "cita")
 public class Cita {
+
+    @Id
+    @Column(name = "id_cita", length = 50)
     private String id_cita;
+
+    @Column(name = "id_usuario_cliente", length = 50)
     private String id_usuario_cliente;
+
+    @Column(name = "id_usuario_profesional", length = 50)
     private String id_usuario_profesional;
+
+    @Column(name = "fecha", length = 20)
     private String fecha;
+
+    @Column(name = "hora", length = 20)
     private String hora;
+
+    @Column(name = "comentario", length = 255)
     private String comentario;
+
+    @Column(name = "calificacion", length = 10)
     private String calificacion;
+
+    @Column(name = "id_tipo_cita", length = 50)
     private String id_tipo_cita;
+
+    @Column(name = "id_pago", length = 50)
     private String id_pago;
 
     public String getId_cita() { return id_cita; }
