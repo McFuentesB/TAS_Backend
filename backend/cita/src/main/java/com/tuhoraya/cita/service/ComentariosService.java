@@ -1,13 +1,14 @@
 package com.tuhoraya.cita.service;
 
-
 import com.tuhoraya.cita.model.Comentarios;
 import com.tuhoraya.cita.repository.ComentariosRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.List;
 
 @Service
 public class ComentariosService {
+
     private final ComentariosRepository repository;
 
     public ComentariosService(ComentariosRepository repository) {
@@ -19,15 +20,15 @@ public class ComentariosService {
     }
 
     public Comentarios getById(String id) {
-        return repository.findById(id);
+        return repository.findById(id).orElse(null);
     }
 
     public void save(String id, Comentarios obj) {
-        repository.save(id, obj);
+        obj.setId_comentario(id);   // el id viene por path
+        repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }
-

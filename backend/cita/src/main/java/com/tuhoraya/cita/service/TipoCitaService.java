@@ -1,13 +1,14 @@
 package com.tuhoraya.cita.service;
 
-
 import com.tuhoraya.cita.model.TipoCita;
 import com.tuhoraya.cita.repository.TipoCitaRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.List;
 
 @Service
 public class TipoCitaService {
+
     private final TipoCitaRepository repository;
 
     public TipoCitaService(TipoCitaRepository repository) {
@@ -19,14 +20,15 @@ public class TipoCitaService {
     }
 
     public TipoCita getById(String id) {
-        return repository.findById(id);
+        return repository.findById(id).orElse(null);
     }
 
     public void save(String id, TipoCita obj) {
-        repository.save(id, obj);
+        obj.setId_tipo_cita(id);
+        repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }
