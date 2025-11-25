@@ -27,6 +27,15 @@ public class Usuario {
     @Column(name = "foto_url", length = 500)
     private String foto_url;
 
+    @Column(name = "telefono", length = 20)
+    private String telefono;
+
+    @Column(name = "onboarded", nullable = false)
+    private Boolean onboarded = false;
+
+    @Column(name = "user_type", length = 20)
+    private String userType;
+
     public String getId_usuario() { return id_usuario; }
     public void setId_usuario(String id_usuario) { this.id_usuario = id_usuario; }
     public String getNombre() { return nombre; }
@@ -41,4 +50,10 @@ public class Usuario {
     public void setId_rol(String id_rol) { this.id_rol = id_rol; }
     public String getFoto_url() { return foto_url; }
     public void setFoto_url(String foto_url) { this.foto_url = foto_url; }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public Boolean getOnboarded() { return onboarded; }
+    public void setOnboarded(Boolean onboarded) { this.onboarded = onboarded; }
+    public String getUserType() { return userType; }
+    public void setUserType(String userType) { this.userType = userType; }
 }

@@ -1,5 +1,9 @@
 package com.tuhoraya.usuario.controller;
 
+import com.tuhoraya.usuario.dto.LoginRequest;
+import com.tuhoraya.usuario.dto.LoginResponse;
+import com.tuhoraya.usuario.dto.AzureAdSyncRequest;
+import com.tuhoraya.usuario.dto.OnboardingUpdateRequest;
 import com.tuhoraya.usuario.model.Usuario;
 import com.tuhoraya.usuario.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -25,9 +29,11 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> getById(@PathVariable String id) {
-        return service.getById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Usuario usuario = service.getById(id);
+        if (usuario != null) {
+            return ResponseEntity.ok(usuario);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{id}")
@@ -43,5 +49,32 @@ public class UsuarioController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        LoginResponse response = service.login(request);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @PostMapping("/azure-sync")
+    public ResponseEntity<LoginResponse> syncAzureAdUser(@RequestBody AzureAdSyncRequest request) {
+        LoginResponse response = service.syncAzureAdUser(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/complete-onboarding")
+    public ResponseEntity<LoginResponse> completeOnboarding(
+            @PathVariable String id,
+            @RequestBody OnboardingUpdateRequest request
+    ) {
+        LoginResponse response = service.completeOnboarding(id, request);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }

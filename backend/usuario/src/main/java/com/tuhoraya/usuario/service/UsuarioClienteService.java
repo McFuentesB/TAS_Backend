@@ -21,9 +21,9 @@ public class UsuarioClienteService {
         return repository.findById(id).orElse(null);
     }
 
-    public void save(String id, UsuarioCliente obj) {
+    public UsuarioCliente save(String id, UsuarioCliente obj) {
         obj.setId_usuario_cliente(id);
-        repository.save(obj);
+        return repository.save(obj);
     }
 
     public void delete(String id) {

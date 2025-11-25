@@ -65,6 +65,28 @@ public class UsuarioBffController {
         }
     }
 
+    private ResponseEntity<String> forwardPut(String path, String body, String authorization) {
+        String url = usuarioServiceUrl + path;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        if (authorization != null && !authorization.isBlank()) {
+            headers.set("Authorization", authorization);
+        }
+        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+
+        try {
+            ResponseEntity<String> response =
+                    restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+            return ResponseEntity
+                    .status(response.getStatusCode())
+                    .body(response.getBody());
+        } catch (RestClientException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_GATEWAY)
+                    .body("{\"error\":\"Error llamando a " + url + "\"}");
+        }
+    }
+
     private ResponseEntity<String> forwardDelete(String path, String authorization) {
         String url = usuarioServiceUrl + path;
         try {
@@ -111,6 +133,24 @@ public class UsuarioBffController {
             @PathVariable String id,
             @RequestHeader(name = "Authorization", required = false) String authorization) {
         return forwardDelete("/usuario/" + id, authorization);
+    }
+
+    @PostMapping("/usuario/login")
+    public ResponseEntity<String> login(@RequestBody String body) {
+        return forwardPost("/usuario/login", body, null);
+    }
+
+    @PostMapping("/usuario/azure-sync")
+    public ResponseEntity<String> azureSync(@RequestBody String body) {
+        return forwardPost("/usuario/azure-sync", body, null);
+    }
+
+    @PutMapping("/usuario/{id}/complete-onboarding")
+    public ResponseEntity<String> completeOnboarding(
+            @PathVariable String id,
+            @RequestBody String body,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardPut("/usuario/" + id + "/complete-onboarding", body, authorization);
     }
 
     // ──────────────────────── /usuariocliente ────────────────────────

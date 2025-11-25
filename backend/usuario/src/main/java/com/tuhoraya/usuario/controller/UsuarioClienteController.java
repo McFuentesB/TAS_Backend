@@ -25,9 +25,11 @@ public class UsuarioClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioCliente> getById(@PathVariable String id) {
-        return service.getById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        UsuarioCliente cliente = service.getById(id);
+        if (cliente != null) {
+            return ResponseEntity.ok(cliente);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{id}")
