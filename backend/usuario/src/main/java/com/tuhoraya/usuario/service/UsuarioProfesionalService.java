@@ -73,9 +73,9 @@ public class UsuarioProfesionalService {
         return null;
     }
 
-    public void save(String id, UsuarioProfesional obj) {
+    public UsuarioProfesional save(String id, UsuarioProfesional obj) {
         obj.setId_usuario_profesional(id);
-        repository.save(obj);
+        return repository.save(obj);
     }
 
     public void delete(String id) {

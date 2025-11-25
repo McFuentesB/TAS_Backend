@@ -1,14 +1,15 @@
 package com.tuhoraya.usuario.service;
 
-
-
 import com.tuhoraya.usuario.model.Rol;
 import com.tuhoraya.usuario.repository.RolRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RolService {
+
     private final RolRepository repository;
 
     public RolService(RolRepository repository) {
@@ -19,15 +20,17 @@ public class RolService {
         return repository.findAll();
     }
 
-    public Rol getById(String id) {
+    public Optional<Rol> getById(String id) {
         return repository.findById(id);
     }
 
-    public void save(String id, Rol obj) {
-        repository.save(id, obj);
+    public Rol save(String id, Rol obj) {
+        // Ajusta el setter según tu entidad
+        obj.setId_rol(id);
+        return repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }

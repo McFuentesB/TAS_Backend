@@ -3,8 +3,11 @@ package com.tuhoraya.usuario.controller;
 import com.tuhoraya.usuario.dto.UsuarioProfesionalDTO;
 import com.tuhoraya.usuario.model.UsuarioProfesional;
 import com.tuhoraya.usuario.service.UsuarioProfesionalService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuarioprofesional")
@@ -22,17 +25,26 @@ public class UsuarioProfesionalController {
     }
 
     @GetMapping("/{id}")
-    public UsuarioProfesionalDTO getById(@PathVariable String id) {
-        return service.getByIdWithUserData(id);
+    public ResponseEntity<UsuarioProfesionalDTO> getById(@PathVariable String id) {
+        UsuarioProfesionalDTO dto = service.getByIdWithUserData(id);
+        if (dto != null) {
+            return ResponseEntity.ok(dto);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{id}")
-    public void save(@PathVariable String id, @RequestBody UsuarioProfesional obj) {
-        service.save(id, obj);
+    public ResponseEntity<UsuarioProfesional> save(
+            @PathVariable String id,
+            @RequestBody UsuarioProfesional obj
+    ) {
+        UsuarioProfesional saved = service.save(id, obj);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

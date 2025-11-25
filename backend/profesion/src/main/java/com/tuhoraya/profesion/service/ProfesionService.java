@@ -3,10 +3,13 @@ package com.tuhoraya.profesion.service;
 import com.tuhoraya.profesion.model.Profesion;
 import com.tuhoraya.profesion.repository.ProfesionRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfesionService {
+
     private final ProfesionRepository repository;
 
     public ProfesionService(ProfesionRepository repository) {
@@ -17,15 +20,17 @@ public class ProfesionService {
         return repository.findAll();
     }
 
-    public Profesion getById(String id) {
+    public Optional<Profesion> getById(String id) {
         return repository.findById(id);
     }
 
-    public void save(String id, Profesion obj) {
-        repository.save(id, obj);
+    public Profesion save(String id, Profesion obj) {
+        // usamos el id del path como id_profesion
+        obj.setId_profesion(id);
+        return repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }
