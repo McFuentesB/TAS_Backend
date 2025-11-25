@@ -1,13 +1,15 @@
 package com.tuhoraya.usuario.service;
 
-
 import com.tuhoraya.usuario.model.UsuarioCliente;
 import com.tuhoraya.usuario.repository.UsuarioClienteRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioClienteService {
+
     private final UsuarioClienteRepository repository;
 
     public UsuarioClienteService(UsuarioClienteRepository repository) {
@@ -18,15 +20,17 @@ public class UsuarioClienteService {
         return repository.findAll();
     }
 
-    public UsuarioCliente getById(String id) {
+    public Optional<UsuarioCliente> getById(String id) {
         return repository.findById(id);
     }
 
-    public void save(String id, UsuarioCliente obj) {
-        repository.save(id, obj);
+    public UsuarioCliente save(String id, UsuarioCliente obj) {
+        // Ajusta el setter según tu entidad
+        obj.setId_usuario_cliente(id);
+        return repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }

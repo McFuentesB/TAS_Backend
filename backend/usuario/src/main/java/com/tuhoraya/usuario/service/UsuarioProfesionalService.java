@@ -3,10 +3,13 @@ package com.tuhoraya.usuario.service;
 import com.tuhoraya.usuario.model.UsuarioProfesional;
 import com.tuhoraya.usuario.repository.UsuarioProfesionalRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioProfesionalService {
+
     private final UsuarioProfesionalRepository repository;
 
     public UsuarioProfesionalService(UsuarioProfesionalRepository repository) {
@@ -17,15 +20,17 @@ public class UsuarioProfesionalService {
         return repository.findAll();
     }
 
-    public UsuarioProfesional getById(String id) {
+    public Optional<UsuarioProfesional> getById(String id) {
         return repository.findById(id);
     }
 
-    public void save(String id, UsuarioProfesional obj) {
-        repository.save(id, obj);
+    public UsuarioProfesional save(String id, UsuarioProfesional obj) {
+        // Ajusta el setter según tu entidad
+        obj.setId_usuario_profesional(id);
+        return repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }

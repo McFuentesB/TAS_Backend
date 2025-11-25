@@ -3,10 +3,13 @@ package com.tuhoraya.profesion.service;
 import com.tuhoraya.profesion.model.Rubro;
 import com.tuhoraya.profesion.repository.RubroRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RubroService {
+
     private final RubroRepository repository;
 
     public RubroService(RubroRepository repository) {
@@ -17,15 +20,17 @@ public class RubroService {
         return repository.findAll();
     }
 
-    public Rubro getById(String id) {
+    public Optional<Rubro> getById(String id) {
         return repository.findById(id);
     }
 
-    public void save(String id, Rubro obj) {
-        repository.save(id, obj);
+    public Rubro save(String id, Rubro obj) {
+        // usar el id del path como PK
+        obj.setId_rubro(id);
+        return repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 }

@@ -1,10 +1,20 @@
 package com.tuhoraya.usuario.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "usuario_profesional")
 public class UsuarioProfesional {
+    @Id
+    @Column(name = "id_usuario_profesional")    
     private String id_usuario_profesional;
+    @Column(name = "id_usuario")
     private String id_usuario;
+    @Column(name = "id_profesion")
     private String id_profesion;
+    @Column(name = "id_servicio_profesional")
     private String id_servicio_profesional;
+    @Column(name = "id_rubro")
     private String id_rubro;
 
     public String getId_usuario_profesional() { return id_usuario_profesional; }

@@ -126,7 +126,7 @@ public class CitaBffController {
         return forwardDelete("/cita/" + id, authorization);
     }
 
-    // ───────────────────────────── /pagos ─────────────────────────────
+
 // ───────────────────────────── /pagos ─────────────────────────────
 
 @GetMapping("/pagos")

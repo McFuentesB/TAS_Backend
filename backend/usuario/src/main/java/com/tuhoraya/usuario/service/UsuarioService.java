@@ -3,10 +3,13 @@ package com.tuhoraya.usuario.service;
 import com.tuhoraya.usuario.model.Usuario;
 import com.tuhoraya.usuario.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
+
     private final UsuarioRepository repository;
 
     public UsuarioService(UsuarioRepository repository) {
@@ -17,16 +20,17 @@ public class UsuarioService {
         return repository.findAll();
     }
 
-    public Usuario getById(String id) {
+    public Optional<Usuario> getById(String id) {
         return repository.findById(id);
     }
 
-    public void save(String id, Usuario obj) {
-        repository.save(id, obj);
+    public Usuario save(String id, Usuario obj) {
+        // Ajusta el setter según tu entidad
+        obj.setId_usuario(id);
+        return repository.save(obj);
     }
 
     public void delete(String id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
-    
 }
