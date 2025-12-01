@@ -7,32 +7,21 @@ public class UsuarioProfesionalDTO {
     private String id_servicio_profesional;
     private String id_rubro;
 
-    // Datos del usuario
     private String nombre;
     private String apellido;
     private String correo;
     private String foto_url;
 
-    // Constructor vacío
+    private String descripcion;
+    private String experiencia;
+    private String pais;
+    private String ciudad;
+    private String servicios;
+    private Integer precioHora;
+
     public UsuarioProfesionalDTO() {
     }
 
-    // Constructor completo
-    public UsuarioProfesionalDTO(String id_usuario_profesional, String id_usuario, String id_profesion,
-                                  String id_servicio_profesional, String id_rubro, String nombre,
-                                  String apellido, String correo, String foto_url) {
-        this.id_usuario_profesional = id_usuario_profesional;
-        this.id_usuario = id_usuario;
-        this.id_profesion = id_profesion;
-        this.id_servicio_profesional = id_servicio_profesional;
-        this.id_rubro = id_rubro;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-        this.foto_url = foto_url;
-    }
-
-    // Getters y Setters
     public String getId_usuario_profesional() { return id_usuario_profesional; }
     public void setId_usuario_profesional(String id_usuario_profesional) { this.id_usuario_profesional = id_usuario_profesional; }
 
@@ -59,4 +48,22 @@ public class UsuarioProfesionalDTO {
 
     public String getFoto_url() { return foto_url; }
     public void setFoto_url(String foto_url) { this.foto_url = foto_url; }
+
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public String getExperiencia() { return experiencia; }
+    public void setExperiencia(String experiencia) { this.experiencia = experiencia; }
+
+    public String getPais() { return pais; }
+    public void setPais(String pais) { this.pais = pais; }
+
+    public String getCiudad() { return ciudad; }
+    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
+
+    public String getServicios() { return servicios; }
+    public void setServicios(String servicios) { this.servicios = servicios; }
+
+    public Integer getPrecioHora() { return precioHora; }
+    public void setPrecioHora(Integer precioHora) { this.precioHora = precioHora; }
 }

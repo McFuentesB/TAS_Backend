@@ -109,6 +109,11 @@ public class UsuarioService {
     }
 
     public LoginResponse completeOnboarding(String id, OnboardingUpdateRequest request) {
+        System.out.println("=== ONBOARDING REQUEST ===");
+        System.out.println("precioHora recibido: " + request.getPrecioHora());
+        System.out.println("userType: " + request.getUserType());
+        System.out.println("===========================");
+
         Usuario usuario = repository.findById(id).orElse(null);
 
         if (usuario == null) {
@@ -133,20 +138,64 @@ public class UsuarioService {
         String userType = request.getUserType();
         if (userType != null && !userType.isEmpty()) {
             usuario.setUserType(userType);
+            
+            // Asignar rol automáticamente basado en userType
+            if (userType.equals("cliente")) {
+                usuario.setId_rol("ROL_CLIENTE");
+            } else if (userType.equals("profesional")) {
+                usuario.setId_rol("ROL_PROFESIONAL");
+            }
         }
 
         repository.save(usuario);
 
         if (userType != null && !userType.isEmpty()) {
             if (userType.equals("cliente")) {
-                UsuarioCliente cliente = new UsuarioCliente();
-                cliente.setId_usuario_cliente(UUID.randomUUID().toString());
-                cliente.setId_usuario(usuario.getId_usuario());
+                UsuarioCliente cliente = clienteRepository.findByIdUsuario(usuario.getId_usuario())
+                    .orElseGet(() -> {
+                        UsuarioCliente nuevo = new UsuarioCliente();
+                        nuevo.setId_usuario_cliente(UUID.randomUUID().toString());
+                        nuevo.setId_usuario(usuario.getId_usuario());
+                        return nuevo;
+                    });
                 clienteRepository.save(cliente);
             } else if (userType.equals("profesional")) {
-                UsuarioProfesional profesional = new UsuarioProfesional();
-                profesional.setId_usuario_profesional(UUID.randomUUID().toString());
-                profesional.setId_usuario(usuario.getId_usuario());
+                UsuarioProfesional profesional = profesionalRepository.findByIdUsuario(usuario.getId_usuario())
+                    .orElseGet(() -> {
+                        UsuarioProfesional nuevo = new UsuarioProfesional();
+                        nuevo.setId_usuario_profesional(UUID.randomUUID().toString());
+                        nuevo.setId_usuario(usuario.getId_usuario());
+                        return nuevo;
+                    });
+
+                if (request.getId_profesion() != null && !request.getId_profesion().isEmpty()) {
+                    profesional.setId_profesion(request.getId_profesion());
+                }
+                if (request.getId_rubro() != null && !request.getId_rubro().isEmpty()) {
+                    profesional.setId_rubro(request.getId_rubro());
+                }
+                if (request.getId_servicio_profesional() != null && !request.getId_servicio_profesional().isEmpty()) {
+                    profesional.setId_servicio_profesional(request.getId_servicio_profesional());
+                }
+                if (request.getDescripcion() != null) {
+                    profesional.setDescripcion(request.getDescripcion());
+                }
+                if (request.getExperiencia() != null) {
+                    profesional.setExperiencia(request.getExperiencia());
+                }
+                if (request.getPais() != null) {
+                    profesional.setPais(request.getPais());
+                }
+                if (request.getCiudad() != null) {
+                    profesional.setCiudad(request.getCiudad());
+                }
+                if (request.getServicios() != null) {
+                    profesional.setServicios(request.getServicios());
+                }
+                if (request.getPrecioHora() != null) {
+                    profesional.setPrecioHora(request.getPrecioHora());
+                }
+
                 profesionalRepository.save(profesional);
             }
         }

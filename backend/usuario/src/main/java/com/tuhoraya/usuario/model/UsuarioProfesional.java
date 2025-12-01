@@ -21,6 +21,24 @@ public class UsuarioProfesional {
     @Column(name = "id_rubro", length = 36)
     private String id_rubro;
 
+    @Column(name = "descripcion", columnDefinition = "TEXT")
+    private String descripcion;
+
+    @Column(name = "experiencia", length = 50)
+    private String experiencia;
+
+    @Column(name = "pais", length = 100)
+    private String pais;
+
+    @Column(name = "ciudad", length = 100)
+    private String ciudad;
+
+    @Column(name = "servicios", columnDefinition = "TEXT")
+    private String servicios;
+
+    @Column(name = "precio_hora")
+    private Integer precioHora = 0;
+
     public String getId_usuario_profesional() { return id_usuario_profesional; }
     public void setId_usuario_profesional(String id_usuario_profesional) { this.id_usuario_profesional = id_usuario_profesional; }
     public String getId_usuario() { return id_usuario; }
@@ -31,4 +49,16 @@ public class UsuarioProfesional {
     public void setId_servicio_profesional(String id_servicio_profesional) { this.id_servicio_profesional = id_servicio_profesional; }
     public String getId_rubro() { return id_rubro; }
     public void setId_rubro(String id_rubro) { this.id_rubro = id_rubro; }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getExperiencia() { return experiencia; }
+    public void setExperiencia(String experiencia) { this.experiencia = experiencia; }
+    public String getPais() { return pais; }
+    public void setPais(String pais) { this.pais = pais; }
+    public String getCiudad() { return ciudad; }
+    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
+    public String getServicios() { return servicios; }
+    public void setServicios(String servicios) { this.servicios = servicios; }
+    public Integer getPrecioHora() { return precioHora; }
+    public void setPrecioHora(Integer precioHora) { this.precioHora = precioHora; }
 }
