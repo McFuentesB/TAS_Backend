@@ -17,12 +17,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .cors(Customizer.withDefaults())
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated()
+                // TEMPORARILY: Permitir todo mientras configuramos Azure AD CIAM
+                // TODO: Reconfigurar autenticación una vez tengamos el issuer correcto de Azure AD
+                .anyRequest().permitAll()
             )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(Customizer.withDefaults())
-            );
+            .anonymous(Customizer.withDefaults())
+            .httpBasic(httpBasic -> httpBasic.disable())
+            .formLogin(formLogin -> formLogin.disable());
+            // TEMPORARILY DISABLED: JWT validation until Azure AD CIAM issuer is properly configured
+            // .oauth2ResourceServer(oauth2 -> oauth2
+            //     .jwt(Customizer.withDefaults())
+            // );
 
         return http.build();
     }

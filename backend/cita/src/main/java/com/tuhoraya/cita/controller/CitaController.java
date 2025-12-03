@@ -26,6 +26,23 @@ public class CitaController {
         return service.getById(id);
     }
 
+    @GetMapping("/profesional/{idProfesional}")
+    public List<Cita> getByProfesionalId(@PathVariable String idProfesional) {
+        return service.getByProfesionalId(idProfesional);
+    }
+
+    @GetMapping("/cliente/{idCliente}")
+    public List<Cita> getByClienteId(@PathVariable String idCliente) {
+        return service.getByClienteId(idCliente);
+    }
+
+    @GetMapping("/profesional/{idProfesional}/fecha/{fecha}")
+    public List<Cita> getByProfesionalIdAndFecha(
+            @PathVariable String idProfesional,
+            @PathVariable String fecha) {
+        return service.getByProfesionalIdAndFecha(idProfesional, fecha);
+    }
+
     @PostMapping("/{id}")
     public void save(@PathVariable String id, @RequestBody Cita obj) {
         service.save(id, obj);

@@ -126,6 +126,28 @@ public class CitaBffController {
         return forwardDelete("/cita/" + id, authorization);
     }
 
+    @GetMapping("/cita/profesional/{idProfesional}")
+    public ResponseEntity<String> getCitasByProfesionalId(
+            @PathVariable String idProfesional,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/cita/profesional/" + idProfesional, authorization);
+    }
+
+    @GetMapping("/cita/cliente/{idCliente}")
+    public ResponseEntity<String> getCitasByClienteId(
+            @PathVariable String idCliente,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/cita/cliente/" + idCliente, authorization);
+    }
+
+    @GetMapping("/cita/profesional/{idProfesional}/fecha/{fecha}")
+    public ResponseEntity<String> getCitasByProfesionalIdAndFecha(
+            @PathVariable String idProfesional,
+            @PathVariable String fecha,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/cita/profesional/" + idProfesional + "/fecha/" + fecha, authorization);
+    }
+
 
 // ───────────────────────────── /pagos ─────────────────────────────
 

@@ -23,6 +23,18 @@ public class CitaService {
         return repository.findById(id).orElse(null);
     }
 
+    public List<Cita> getByProfesionalId(String idProfesional) {
+        return repository.findByProfesionalId(idProfesional);
+    }
+
+    public List<Cita> getByClienteId(String idCliente) {
+        return repository.findByClienteId(idCliente);
+    }
+
+    public List<Cita> getByProfesionalIdAndFecha(String idProfesional, String fecha) {
+        return repository.findByProfesionalIdAndFecha(idProfesional, fecha);
+    }
+
     public void save(String id, Cita obj) {
         // El ID viene por path, lo seteamos en la entidad antes de guardar
         obj.setId_cita(id);
