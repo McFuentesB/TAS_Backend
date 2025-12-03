@@ -14,14 +14,9 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - tas-net
-    # Si quieres conectarte desde tu PC al MySQL que está en la EC2, descomenta:
-    # ports:
-    #   - "3306:3306"
 
   usuario:
-    build:
-      context: ./backend/usuario
-    image: tas-usuario:latest
+    image: mati012/tas-usuario:1.0
     container_name: usuario
     restart: always
     environment:
@@ -35,9 +30,7 @@ services:
       - tas-net
 
   profesion:
-    build:
-      context: ./backend/profesion
-    image: tas-profesion:latest
+    image: mati012/tas-profesion:1.0
     container_name: profesion
     restart: always
     environment:
@@ -51,9 +44,7 @@ services:
       - tas-net
 
   cita:
-    build:
-      context: ./backend/cita
-    image: tas-cita:latest
+    image: mati012/tas-cita:1.0
     container_name: cita
     restart: always
     environment:
@@ -67,24 +58,24 @@ services:
       - tas-net
 
   bff:
-    build:
-      context: ./backend/bff
-    image: tas-bff:latest
+    image: mati012/tas-bff:1.0
     container_name: bff
     restart: always
     environment:
       SERVER_PORT: 8080
-      USUARIO_SERVICE_URL: http://usuario:8081
-      PROFESION_SERVICE_URL: http://profesion:8082
-      CITA_SERVICE_URL: http://cita:8083
+      MICROSERVICES_USUARIO_URL: http://usuario:8081
+      MICROSERVICES_PROFESION_URL: http://profesion:8082
+      MICROSERVICES_CITA_URL: http://cita:8083
     depends_on:
       - usuario
       - profesion
       - cita
     ports:
-      - "8000:8080"
+      - "8080:8080"
     networks:
       - tas-net
+
+
 
 networks:
   tas-net:

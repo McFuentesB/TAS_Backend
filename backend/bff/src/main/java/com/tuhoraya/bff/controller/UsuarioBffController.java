@@ -142,8 +142,10 @@ public class UsuarioBffController {
 
     @PostMapping("/usuario/azure-sync")
     public ResponseEntity<String> azureSync(@RequestBody String body) {
+        // No pasa Authorization => funciona igual que Postman "No Auth"
         return forwardPost("/usuario/azure-sync", body, null);
     }
+
 
     @PutMapping("/usuario/{id}/complete-onboarding")
     public ResponseEntity<String> completeOnboarding(
