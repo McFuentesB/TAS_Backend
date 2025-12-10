@@ -208,5 +208,34 @@ public ResponseEntity<String> deleteTipoCita(
         @RequestHeader(name = "Authorization", required = false) String authorization) {
     return forwardDelete("/tipocita/" + id, authorization);
 }
+// ───────────────────────────── /historial ─────────────────────────────
+
+@GetMapping("/historial")
+public ResponseEntity<String> getAllHistorial(
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardGet("/historial", authorization);
+}
+
+@GetMapping("/historial/{id}")
+public ResponseEntity<String> getHistorialById(
+        @PathVariable String id,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardGet("/historial/" + id, authorization);
+}
+
+@PostMapping("/historial/{id}")
+public ResponseEntity<String> saveHistorial(
+        @PathVariable String id,
+        @RequestBody String body,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardPost("/historial/" + id, body, authorization);
+}
+
+@DeleteMapping("/historial/{id}")
+public ResponseEntity<String> deleteHistorial(
+        @PathVariable String id,
+        @RequestHeader(name = "Authorization", required = false) String authorization) {
+    return forwardDelete("/historial/" + id, authorization);
+}
 
 }
