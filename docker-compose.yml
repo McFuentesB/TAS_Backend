@@ -44,7 +44,7 @@ services:
       - tas-net
 
   cita:
-    image: mati012/tas-cita:1.0
+    image: mati012/tas-cita:1.1
     container_name: cita
     restart: always
     environment:
@@ -58,7 +58,7 @@ services:
       - tas-net
 
   bff:
-    image: mati012/tas-bff:1.0
+    image: mati012/tas-bff:1.1
     container_name: bff
     restart: always
     environment:
