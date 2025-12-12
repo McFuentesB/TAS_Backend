@@ -67,12 +67,21 @@ public class UsuarioService {
     }
 
     public LoginResponse syncAzureAdUser(AzureAdSyncRequest request) {
-        // Buscar usuario por correo
-        Usuario usuario = repository.findByCorreo(request.getCorreo());
 
-        if (usuario != null) {
-            // Usuario existe - retornar sus datos completos y estado de onboarding
-            return new LoginResponse(
+    // 1) Validar que venga correo
+    if (request.getCorreo() == null || request.getCorreo().isBlank()) {
+        return new LoginResponse(false, "El correo es obligatorio en azure-sync");
+    }
+
+    String correoLimpio = request.getCorreo().trim().toLowerCase();
+    String nombre = request.getNombre();
+
+    // 2) Buscar usuario por correo
+    Usuario usuario = repository.findByCorreo(correoLimpio);
+
+    if (usuario != null) {
+        // Ya existe → devolver su info
+        return new LoginResponse(
                 true,
                 "Usuario sincronizado exitosamente",
                 usuario.getId_usuario(),
@@ -82,31 +91,34 @@ public class UsuarioService {
                 usuario.getFoto_url(),
                 usuario.getId_rol(),
                 usuario.getOnboarded() != null ? usuario.getOnboarded() : false
-            );
-        } else {
-            // Usuario NO existe - crearlo con datos básicos de Azure AD
-            Usuario nuevoUsuario = new Usuario();
-            nuevoUsuario.setId_usuario(UUID.randomUUID().toString());
-            nuevoUsuario.setCorreo(request.getCorreo());
-            nuevoUsuario.setNombre(request.getNombre());
-            nuevoUsuario.setOnboarded(false); // Marcar como no completado
-
-            repository.save(nuevoUsuario);
-
-            // Retornar datos del nuevo usuario indicando que necesita onboarding
-            return new LoginResponse(
-                true,
-                "Usuario creado - requiere completar onboarding",
-                nuevoUsuario.getId_usuario(),
-                nuevoUsuario.getNombre(),
-                null, // apellido
-                nuevoUsuario.getCorreo(),
-                null, // foto_url
-                null, // id_rol
-                false // onboarded = false
-            );
-        }
+        );
     }
+
+    // 3) No existe → crearlo
+    Usuario nuevoUsuario = new Usuario();
+    nuevoUsuario.setId_usuario(UUID.randomUUID().toString());
+    nuevoUsuario.setCorreo(correoLimpio);
+    nuevoUsuario.setNombre(nombre != null ? nombre : "");
+    // apellido lo dejamos null (se completará en onboarding)
+    nuevoUsuario.setOnboarded(false); // necesita completar onboarding
+    // si quieres, puedes asignar rol por defecto:
+    // nuevoUsuario.setId_rol("ROL_CLIENTE");
+
+    repository.save(nuevoUsuario);
+
+    return new LoginResponse(
+            true,
+            "Usuario creado - requiere completar onboarding",
+            nuevoUsuario.getId_usuario(),
+            nuevoUsuario.getNombre(),
+            nuevoUsuario.getApellido(),  // probablemente null
+            nuevoUsuario.getCorreo(),
+            nuevoUsuario.getFoto_url(),  // null
+            nuevoUsuario.getId_rol(),    // null si no seteas rol
+            false
+    );
+}
+
 
     public LoginResponse completeOnboarding(String id, OnboardingUpdateRequest request) {
         System.out.println("=== ONBOARDING REQUEST ===");

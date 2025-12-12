@@ -16,7 +16,7 @@ services:
       - tas-net
 
   usuario:
-    image: mati012/tas-usuario:1.0
+    image: mati012/tas-usuario:1.1
     container_name: usuario
     restart: always
     environment:
