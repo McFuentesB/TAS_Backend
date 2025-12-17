@@ -23,8 +23,16 @@ public class ComentariosService {
         return repository.findById(id).orElse(null);
     }
 
+    public List<Comentarios> getByProfesional(String idProfesional) {
+        return repository.findByIdUsuarioProfesional(idProfesional);
+    }
+
+    public List<Comentarios> getByProfesionalAndCliente(String idProfesional, String idCliente) {
+        return repository.findByIdUsuarioProfesionalAndIdUsuarioCliente(idProfesional, idCliente);
+    }
+
     public void save(String id, Comentarios obj) {
-        obj.setId_comentario(id);   // el id viene por path
+        obj.setIdComentario(id);
         repository.save(obj);
     }
 

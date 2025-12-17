@@ -237,5 +237,49 @@ public ResponseEntity<String> deleteHistorial(
         @RequestHeader(name = "Authorization", required = false) String authorization) {
     return forwardDelete("/historial/" + id, authorization);
 }
+// ───────────────────────────── /comentarios ─────────────────────────────
+
+@GetMapping("/comentarios")
+    public ResponseEntity<String> getAll(
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/comentarios", authorization);
+    }
+
+    @GetMapping("/comentarios/{id}")
+    public ResponseEntity<String> getById(
+            @PathVariable String id,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/comentarios/" + id, authorization);
+    }
+
+    @PostMapping("/comentarios/{id}")
+    public ResponseEntity<String> save(
+            @PathVariable String id,
+            @RequestBody String body,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardPost("/comentarios/" + id, body, authorization);
+    }
+
+    @DeleteMapping("/comentarios/{id}")
+    public ResponseEntity<String> delete(
+            @PathVariable String id,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardDelete("/comentarios/" + id, authorization);
+    }
+
+    @GetMapping("/comentarios/profesional/{idProfesional}")
+    public ResponseEntity<String> getByProfesional(
+            @PathVariable String idProfesional,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/comentarios/profesional/" + idProfesional, authorization);
+    }
+
+    @GetMapping("/comentarios/profesional/{idProfesional}/cliente/{idCliente}")
+    public ResponseEntity<String> getByProfesionalAndCliente(
+            @PathVariable String idProfesional,
+            @PathVariable String idCliente,
+            @RequestHeader(name = "Authorization", required = false) String authorization) {
+        return forwardGet("/comentarios/profesional/" + idProfesional + "/cliente/" + idCliente, authorization);
+    }
 
 }

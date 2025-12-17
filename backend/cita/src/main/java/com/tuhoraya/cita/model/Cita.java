@@ -34,6 +34,17 @@ public class Cita {
     @Column(name = "id_pago", length = 50)
     private String id_pago;
 
+    // ✅ NUEVO: estado de la cita
+    @Column(name = "estado", length = 20)
+    private String estado; // PENDIENTE | ACEPTADA | RECHAZADA | CANCELADA
+
+    @PrePersist
+    public void prePersist() {
+        if (estado == null || estado.isBlank()) {
+            estado = "PENDIENTE";
+        }
+    }
+
     public String getId_cita() { return id_cita; }
     public void setId_cita(String id_cita) { this.id_cita = id_cita; }
 
@@ -60,4 +71,7 @@ public class Cita {
 
     public String getId_pago() { return id_pago; }
     public void setId_pago(String id_pago) { this.id_pago = id_pago; }
+
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 }

@@ -1,20 +1,25 @@
 package com.tuhoraya.cita.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class) // ✅ CLAVE
 @Entity
 @Table(name = "comentarios")
 public class Comentarios {
 
     @Id
     @Column(name = "id_comentario", length = 50)
-    private String id_comentario;
+    private String idComentario;
 
     @Column(name = "id_usuario_profesional", length = 50)
-    private String id_usuario_profesional;
+    private String idUsuarioProfesional;
 
     @Column(name = "id_usuario_cliente", length = 50)
-    private String id_usuario_cliente;
+    private String idUsuarioCliente;
 
     @Column(name = "calificacion", length = 10)
     private String calificacion;
@@ -22,14 +27,14 @@ public class Comentarios {
     @Column(name = "comentario", length = 255)
     private String comentario;
 
-    public String getId_comentario() { return id_comentario; }
-    public void setId_comentario(String id_comentario) { this.id_comentario = id_comentario; }
+    public String getIdComentario() { return idComentario; }
+    public void setIdComentario(String idComentario) { this.idComentario = idComentario; }
 
-    public String getId_usuario_profesional() { return id_usuario_profesional; }
-    public void setId_usuario_profesional(String id_usuario_profesional) { this.id_usuario_profesional = id_usuario_profesional; }
+    public String getIdUsuarioProfesional() { return idUsuarioProfesional; }
+    public void setIdUsuarioProfesional(String idUsuarioProfesional) { this.idUsuarioProfesional = idUsuarioProfesional; }
 
-    public String getId_usuario_cliente() { return id_usuario_cliente; }
-    public void setId_usuario_cliente(String id_usuario_cliente) { this.id_usuario_cliente = id_usuario_cliente; }
+    public String getIdUsuarioCliente() { return idUsuarioCliente; }
+    public void setIdUsuarioCliente(String idUsuarioCliente) { this.idUsuarioCliente = idUsuarioCliente; }
 
     public String getCalificacion() { return calificacion; }
     public void setCalificacion(String calificacion) { this.calificacion = calificacion; }
